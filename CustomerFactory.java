@@ -1,9 +1,13 @@
 public class CustomerFactory extends Thread {
 
 	private long nextCustomer;  //the time in ms, in the future, when the next customer walks in
+	private long simTime;
+	private long startTime;
 
-	public CustomerFactory() {
+	public CustomerFactory(long simTime) {
 		nextCustomer = getNextTime(1000, 10000);
+		startTime = System.currentTimeMillis();
+		this.simTime = simTime;
 	}
 
 	public long getNextTime(long min, long max) {
@@ -12,7 +16,7 @@ public class CustomerFactory extends Thread {
 
 	@Override
 	public void run() {
-		while(true) {
+		while(startTime + simTime > System.currentTimeMillis()) {
 			//if it's time to create a new Customer
 			if(nextCustomer < System.currentTimeMillis()) {
 				Customer c = new Customer();
@@ -21,5 +25,6 @@ public class CustomerFactory extends Thread {
 				nextCustomer = getNextTime(1000,10000);
 			}
 		}
+		System.out.println("\nCUSTOMER FACTORY DONE\n");
 	}
 }
